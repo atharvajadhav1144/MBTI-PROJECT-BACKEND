@@ -54,7 +54,8 @@ app.use(
   })
 );
 
-app.options("*", cors());
+app.options("/*", cors());
+
 
 
 // MongoDB connection
@@ -86,4 +87,5 @@ const startServer = async () => {
 };
 
 startServer();
+
 
