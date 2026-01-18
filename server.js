@@ -30,24 +30,32 @@ app.use(
     origin: (origin, callback) => {
       console.log("Origin received:", origin);
 
-      // Allow requests with no origin (Postman / server-to-server)
+      // allow requests with no origin (Postman / server calls)
       if (!origin) return callback(null, true);
 
-      // Allow only whitelisted origins
-      if (allowedOrigins.includes(origin)) {
+      // ✅ allow localhost
+      if (
+        origin.startsWith("http://localhost") ||
+        origin.startsWith("http://127.0.0.1")
+      ) {
         return callback(null, true);
       }
 
-      return callback(new Error("Not allowed by CORS: " + origin));
+      // ✅ allow ANY vercel domain (prod + preview)
+      if (origin.endsWith(".vercel.app")) {
+        return callback(null, true);
+      }
+
+      return callback(null, false);
     },
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
   })
 );
 
-// ✅ handle preflight requests properly
 app.options("*", cors());
+
 
 // MongoDB connection
 const MONGODB_URI =
@@ -78,3 +86,4 @@ const startServer = async () => {
 };
 
 startServer();
+
