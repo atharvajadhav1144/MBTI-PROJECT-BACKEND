@@ -54,7 +54,7 @@ app.use(
   })
 );
 
-app.options("/*", cors());
+
 
 
 
@@ -87,5 +87,6 @@ const startServer = async () => {
 };
 
 startServer();
+
 
 
